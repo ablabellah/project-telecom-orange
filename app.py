@@ -566,20 +566,28 @@ if user_menu == 'Analyse spécifique aux Projets':
 
 # Exporter les données filtrées
 st.sidebar.subheader("Exporter les Données Filtrées")
-if st.sidebar.button('Exporter vers CSV'):
-    if user_menu == 'Analyse par Ville et Année':
-        df_filtered = ville_data
-        file_name = f'projets_{selected_ville}_{selected_annee}.csv'
-    elif user_menu == 'Analyse par Date Fin':
-        df_filtered = date_fin_data
-        file_name = f'projets_date_fin_{selected_date_fin}.csv'
-    elif user_menu == 'Analyse spécifique aux Projets':
-        df_filtered = filtered_df
-        file_name = 'projets_specifiques.csv'
-    else:
-        df_filtered = df
-        file_name = 'projets_all.csv'
 
-    # Save the filtered data to a CSV file
-    df_filtered.to_csv(file_name, index=False)
-    st.sidebar.success(f"Fichier CSV exporté : {file_name}")
+# Créer un bouton pour télécharger le fichier CSV
+if user_menu == 'Analyse par Ville et Année':
+    df_filtered = ville_data
+    file_name = f'projets_{selected_ville}_{selected_annee}.csv'
+elif user_menu == 'Analyse par Date Fin':
+    df_filtered = date_fin_data
+    file_name = f'projets_date_fin_{selected_date_fin}.csv'
+elif user_menu == 'Analyse spécifique aux Projets':
+    df_filtered = filtered_df
+    file_name = 'projets_specifiques.csv'
+else:
+    df_filtered = df
+    file_name = 'projets_all.csv'
+
+# Convertir le DataFrame en CSV
+csv = df_filtered.to_csv(index=False)
+
+# Bouton de téléchargement
+st.sidebar.download_button(
+    label="Exporter vers CSV",
+    data=csv,
+    file_name=file_name,
+    mime='text/csv'
+)
